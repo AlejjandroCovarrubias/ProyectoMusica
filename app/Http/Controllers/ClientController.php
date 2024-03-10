@@ -10,6 +10,12 @@ class ClientController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function __construct()
+    {
+        $this->middleware('auth')->except('create');
+    }
+
     public function index()
     {
         $clients=Client::all();

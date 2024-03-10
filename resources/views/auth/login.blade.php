@@ -38,10 +38,14 @@
                         {{ __('Forgot your password?') }}
                     </a>
                 @endif
-
+                
                 <x-button class="ms-4">
                     {{ __('Log in') }}
                 </x-button>
+                
+                <a class="ms-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo disabled:opacity-25 transition ease-in-out duration-150" href="{{ route('register') }}">
+                    Registrarse
+                </a>    
             </div>
         </form>
     </x-authentication-card>
