@@ -86,13 +86,10 @@ class ClientController extends Controller
             'username'=>'required|max:255',
             'email'=>'required|max:255',
             'password'=>'required|max:255',
-            'twitter'=>'required|max:255',
-            'facebook'=>'required|max:255',
-            'instagram'=>'required|max:255',
             'descrip'=>'required|min:10'
         ]);
         // Guardar informacion
-        $client=new Client();
+        $client=Client::findOrFail($id);
         $client->username=$request->username;
         $client->email=$request->email;
         $client->password=$request->password;
