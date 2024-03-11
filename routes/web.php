@@ -19,6 +19,7 @@ Route::get('/', function () {
 });
 
 Route::resource('cliente',ClientController::class);
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

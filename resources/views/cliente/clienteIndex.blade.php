@@ -17,6 +17,9 @@
                 <th>Password</th>
                 <th>Descripcion</th>
                 <th>Creado/Actualizado</th>
+                <th>Twitter</th>
+                <th>Facebook</th>
+                <th>Instagram</th>
                 <th>Funciones</th>
             </tr>
         </thead>
@@ -27,6 +30,9 @@
                 <td>{{$client->email}}</td>
                 <td>{{$client->password}}</td>
                 <td>{{$client->descrip}}</td>
+                <td>{{$client->twitter}}</td>
+                <td>{{$client->facebook}}</td>
+                <td>{{$client->instagram}}</td>
                 <td>{{$client->created_at}} | {{$client->updated_at}}</td>
                 <td>
                     <a href="{{ route('cliente.show',$client->id) }}">Detalle</a>

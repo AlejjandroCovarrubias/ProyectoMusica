@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -39,6 +40,9 @@ class ClientController extends Controller
             'username'=>'required|max:255',
             'email'=>'required|max:255',
             'password'=>'required|max:255',
+            'twitter'=>'required|max:255',
+            'facebook'=>'required|max:255',
+            'instagram'=>'required|max:255',
             'descrip'=>'required|min:10'
         ]);
         // Guardar informacion
@@ -46,6 +50,9 @@ class ClientController extends Controller
         $client->username=$request->username;
         $client->email=$request->email;
         $client->password=$request->password;
+        $client->twitter=$request->twitter;
+        $client->facebook=$request->facebook;
+        $client->instagram=$request->instagram;
         $client->descrip=$request->descrip;
         $client->save();
         //Redireccion
@@ -79,13 +86,19 @@ class ClientController extends Controller
             'username'=>'required|max:255',
             'email'=>'required|max:255',
             'password'=>'required|max:255',
+            'twitter'=>'required|max:255',
+            'facebook'=>'required|max:255',
+            'instagram'=>'required|max:255',
             'descrip'=>'required|min:10'
         ]);
-        $client=Client::findOrFail($id);
         // Guardar informacion
+        $client=new Client();
         $client->username=$request->username;
         $client->email=$request->email;
         $client->password=$request->password;
+        $client->twitter=$request->twitter;
+        $client->facebook=$request->facebook;
+        $client->instagram=$request->instagram;
         $client->descrip=$request->descrip;
         $client->save();
         //Redireccion
