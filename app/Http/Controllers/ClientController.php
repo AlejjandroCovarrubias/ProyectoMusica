@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
@@ -14,12 +15,12 @@ class ClientController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth')->except('create');
+        $this->middleware('auth');
     }
 
     public function index()
     {
-        $clients=Client::all();
+        $clients=Auth::user()->clients;
         return view('cliente/clienteIndex',compact('clients'));
     }
 
@@ -40,13 +41,14 @@ class ClientController extends Controller
             'username'=>'required|max:255',
             'email'=>'required|max:255',
             'password'=>'required|max:255',
-            'twitter'=>'required|max:255',
-            'facebook'=>'required|max:255',
-            'instagram'=>'required|max:255',
+            'twitter'=>'max:255',
+            'facebook'=>'max:255',
+            'instagram'=>'max:255',
             'descrip'=>'required|min:10'
         ]);
         // Guardar informacion
         $client=new Client();
+        $client->user_id=Auth::id();
         $client->username=$request->username;
         $client->email=$request->email;
         $client->password=$request->password;
@@ -86,10 +88,14 @@ class ClientController extends Controller
             'username'=>'required|max:255',
             'email'=>'required|max:255',
             'password'=>'required|max:255',
+            'twitter'=>'max:255',
+            'facebook'=>'max:255',
+            'instagram'=>'max:255',
             'descrip'=>'required|min:10'
         ]);
         // Guardar informacion
         $client=Client::findOrFail($id);
+        $client->user_id=Auth::id();
         $client->username=$request->username;
         $client->email=$request->email;
         $client->password=$request->password;
