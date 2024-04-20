@@ -5,7 +5,7 @@
         <h1>Registro de artista</h1>
         <br>
         <p>¿Quieres compartir tus creaciones con más gente? Te animamos a que rellenes el formulario para que empieces a subir tu <a href="#">música.</a></p>
-        <form action="{{ route('cliente.store') }}" method="POST">
+        <form action="{{ route('cliente.store', $id) }}" method="POST">
             @csrf
             <br>
             <label for="username" style="display: inline-block; text-align:left;">Nombre artístico</label>

@@ -76,6 +76,7 @@
 			</li>
 			<li><a href="#">Mis playlists</a></li>
             <li><a href="{{route('cliente.create')}}">Registrate como artista</a></li>
+			<li><a href="{{route('cliente.seleccion-cuenta', $clients=Auth::user() )}}">Subir canciones</a></li>
 		</ul>
 	</header>
 	<!-- Header section end -->

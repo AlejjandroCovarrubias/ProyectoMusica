@@ -25,7 +25,7 @@
             <tbody>
                 @foreach($clients as $client)
                 <tr>
-                    <td>{{$client->user_id}}</td>
+                    <td>{{Auth::user()->email}}</td>
                     <td>{{$client->username}}</td>
                     <td>{{$client->email}}</td>
                     <td>{{$client->password}}</td>

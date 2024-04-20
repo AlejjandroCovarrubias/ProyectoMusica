@@ -13,4 +13,9 @@ class Client extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function song()
+    {
+        return $this->belongsToMany(Song::class);
+    }
 }

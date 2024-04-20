@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('email');
             $table->string('password');
             $table->text('descrip');
-            $table->text('twitter');
-            $table->text('facebook');
-            $table->text('instagram');
+            $table->text('twitter')->nullable();
+            $table->text('facebook')->nullable();
+            $table->text('instagram')->nullable();
             $table->timestamps();
         });
     }

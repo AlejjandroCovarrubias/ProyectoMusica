@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use Database\Factories\ClientFactory;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -116,5 +117,11 @@ class ClientController extends Controller
         $client=Client::findOrFail($id);
         $client->delete();
         return redirect()->route('cliente.index');
+    }
+
+    public function crearCanciones()
+    {
+        $clients=Auth::user()->clients;
+        return view('cliente.clienteSeleccion',compact('clients'));
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\SongController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +20,13 @@ Route::get('/', function () {
 });
 
 Route::resource('cliente',ClientController::class);
+
+Route::resource('canciones',SongController::class);
+
+Route::get('/cliente/{cliente}/seleccion-cuenta',[ClientController::class,'crearCanciones'])->name('cliente.seleccion-cuenta');    
+
+Route::get('/canciones/{cliente}/vista-general',[SongController::class,'vistaGeneral'])->name('canciones.vista-general');
+//Route::post('/cliente/{cliente}/seleccion-cuenta',[ClientController::class,'crearCanciones'])->name('cliete.seleccion-cuenta');
 
 Route::middleware([
     'auth:sanctum',
