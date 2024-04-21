@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Song;
 use App\Models\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\View;
 
 class SongController extends Controller
 {
@@ -102,7 +100,6 @@ class SongController extends Controller
         $song->save();
         $cliente=Client::findOrFail($id);
         $cliente->song()->attach($song->id);
-        //$song->client()->attach($cliente->id);
         return redirect()->route('canciones.show',$song->id);
     }
 
