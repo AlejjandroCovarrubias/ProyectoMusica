@@ -6,6 +6,7 @@ use App\Models\Song;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
 
 class SongController extends Controller
 {
@@ -19,9 +20,9 @@ class SongController extends Controller
     }
  
 
-    public function index(Request $request)
+    public function index()
     {
-        
+    
     }
 
     /**
@@ -29,7 +30,7 @@ class SongController extends Controller
      */
     public function create()
     {
-        return view('canciones.cancionesCreate');
+        
     }
 
     /**
@@ -37,19 +38,7 @@ class SongController extends Controller
      */
     public function store(Request $request)
     {
-        $song=new Song();
-        $song->title=$request->title;
-        $song->genre=$request->genre;
-        if ($request->file('image')->isValid() && $request->file('mp3')->isValid()) 
-        {
-            $song->ubiPortada=$request->image->store('','public');
-            $song->mimePortada=$request->image->getClientMimeType();
-            $song->ubiCancion=$request->mp3->store('','public');
-            $song->mimeCancion=$request->mp3->getClientMimeType();
-        }
-        $song->save();
-        return redirect()->route('canciones.show',$song->id);
-        
+        //   
     }
 
 
@@ -65,9 +54,9 @@ class SongController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Song $song)
+    public function edit()
     {
-        //
+        
     }
 
     /**
@@ -90,5 +79,37 @@ class SongController extends Controller
     {
         $cliente=Client::findOrFail($id);
         return view('canciones.cancionesGeneral',compact('cliente'));
+    }
+
+    public function Registrar($id)
+    {
+        $cliente=Client::findOrFail($id);
+        return view('canciones.cancionesCreate',compact('cliente'));
+    }
+
+    public function asignarOwner(Request $request, $id)
+    {
+        $song=new Song();
+        $song->title=$request->title;
+        $song->genre=$request->genre;
+        if ($request->file('image')->isValid() && $request->file('mp3')->isValid()) 
+        {
+            $song->ubiPortada=$request->image->store('','public');
+            $song->mimePortada=$request->image->getClientMimeType();
+            $song->ubiCancion=$request->mp3->store('','public');
+            $song->mimeCancion=$request->mp3->getClientMimeType();
+        }
+        $song->save();
+        $cliente=Client::findOrFail($id);
+        $cliente->song()->attach($song->id);
+        //$song->client()->attach($cliente->id);
+        return redirect()->route('canciones.show',$song->id);
+    }
+
+    public function MisCanciones($id)
+    {
+        $cliente=Client::findOrFail($id);
+        $songs=$cliente->song()->get();
+        return view('canciones.cancionesIndex',compact('songs'));
     }
 }

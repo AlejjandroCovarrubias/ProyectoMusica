@@ -26,7 +26,12 @@ Route::resource('canciones',SongController::class);
 Route::get('/cliente/{cliente}/seleccion-cuenta',[ClientController::class,'crearCanciones'])->name('cliente.seleccion-cuenta');    
 
 Route::get('/canciones/{cliente}/vista-general',[SongController::class,'vistaGeneral'])->name('canciones.vista-general');
-//Route::post('/cliente/{cliente}/seleccion-cuenta',[ClientController::class,'crearCanciones'])->name('cliete.seleccion-cuenta');
+
+Route::get('/canciones/{cliente}/Registrar',[SongController::class,'Registrar'])->name('canciones.registrar');
+
+Route::get('/canciones/{cliente}/MisCanciones',[SongController::class,'MisCanciones'])->name('canciones.MisCanciones');
+
+Route::post('/cliente/{cliente}/relacion', [SongController::class, 'asignarOwner'])->name('song.relacion.client.song');
 
 Route::middleware([
     'auth:sanctum',

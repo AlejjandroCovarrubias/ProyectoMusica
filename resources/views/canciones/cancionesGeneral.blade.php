@@ -9,7 +9,7 @@
         <h2>Selecciona una opcion del siguiente menu:</h2>
         <br>
         <div class="row" style="margin: auto; width: 50%; padding: 20px;">
-            <a href="{{ route('canciones.create') }}" style="padding-right: 135px;">
+            <a href="{{ route('canciones.registrar', $cliente->id) }}" style="padding-right: 135px;">
                 <button class="site-btn">Subir cancion</button>
             </a>
             <a href="#">
@@ -20,7 +20,7 @@
             <a href="#" style="padding-right: 115px;">
                 <button class="site-btn">Modificar canciones</button>
             </a>
-            <a href="#">
+            <a href="{{ route('canciones.MisCanciones', $cliente->id ) }}">
                 <button class="site-btn">Ver canciones</button>
             </a>
         </div>

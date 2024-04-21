@@ -4,7 +4,7 @@
         <br><br>
         <h1>Subir musica</h1>
         <br><br>
-        <form action="{{ route('canciones.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('song.relacion.client.song', $cliente->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             <label for="title" style="margin-left: 10px; display: inline-block; text-align:left;">Titulo</label>
             <input type="text" name="title" style="margin-left: 80px; @error('title') border-color: red; @enderror">
