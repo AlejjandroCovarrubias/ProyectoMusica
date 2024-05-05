@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Song;
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Intervention\Image\ImageManager;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
+
 
 class SongController extends Controller
 {
@@ -60,17 +64,35 @@ class SongController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Song $song)
+    public function update(Request $request, $id)
     {
-        //
+        $song=Song::findOrFail($id);
+        $song->title=$request->title;
+        $song->genre=$request->genre;
+        Storage::delete('public/'.$song->ubiPortada);
+        Storage::delete('public/'.$song->ubiCancion);
+        if ($request->file('image')->isValid() && $request->file('mp3')->isValid()) 
+        {
+            $song->ubiPortada=$request->image->store('','public');
+            $song->mimePortada=$request->image->getClientMimeType();
+            $song->ubiCancion=$request->mp3->store('','public');
+            $song->mimeCancion=$request->mp3->getClientMimeType();
+        }
+        $song->save();
+        return redirect()->route('canciones.show',$song->id);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Song $song)
+    public function destroy($idSong)
     {
-        //
+        $song=Song::findOrFail($idSong);
+        $cliente=$song->client()->get();
+        dd($cliente);
+        Storage::delete('public/'.$song->ubiPortada);
+        Storage::delete('public/'.$song->ubiCancion);
+        $song->delete();
     }
 
     public function vistaGeneral($id)
@@ -108,5 +130,26 @@ class SongController extends Controller
         $cliente=Client::findOrFail($id);
         $songs=$cliente->song()->get();
         return view('canciones.cancionesIndex',compact('songs'));
+    }
+
+    public function EditShow($id)
+    {
+        $cliente=Client::findOrFail($id);
+        $songs=$cliente->song()->get();
+        return view('canciones.cancionesEditShow',compact('songs'),compact('cliente'));
+    }
+
+    public function EditSong($id,$id2)
+    {
+        $cliente=Client::findOrFail($id);
+        $song=Song::findOrFail($id2);
+        return view('canciones.cancionesEditSong',compact('cliente'),compact('song'));
+    }
+
+    public function DeleteShow($id)
+    {
+        $cliente=Client::findOrFail($id);
+        $songs=$cliente->song()->get();
+        return view('canciones.cancionesDeleteShow',compact('songs'),compact('cliente'));
     }
 }

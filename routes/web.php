@@ -25,11 +25,17 @@ Route::resource('canciones',SongController::class);
 
 Route::get('/cliente/{cliente}/seleccion-cuenta',[ClientController::class,'crearCanciones'])->name('cliente.seleccion-cuenta');    
 
-Route::get('/canciones/{cliente}/vista-general',[SongController::class,'vistaGeneral'])->name('canciones.vista-general');
+Route::get('/canciones/{cancion}/vista-general',[SongController::class,'vistaGeneral'])->name('canciones.vista-general');
 
-Route::get('/canciones/{cliente}/Registrar',[SongController::class,'Registrar'])->name('canciones.registrar');
+Route::get('/canciones/{cancion}/Registrar',[SongController::class,'Registrar'])->name('canciones.registrar');
 
-Route::get('/canciones/{cliente}/MisCanciones',[SongController::class,'MisCanciones'])->name('canciones.MisCanciones');
+Route::get('/canciones/{cancion}/MisCanciones',[SongController::class,'MisCanciones'])->name('canciones.MisCanciones');
+
+Route::get('/canciones/{cancion}/MisCancionesEdit',[SongController::class,'EditShow'])->name('canciones.EditShow');
+
+Route::get('/canciones/{cancion}/MisCancionesDelete',[SongController::class,'DeleteShow'])->name('canciones.DeleteShow');
+
+Route::get('/canciones/{cliente}/{cancion}/Edit',[SongController::class,'EditSong'])->name('canciones.EditSong');
 
 Route::post('/cliente/{cliente}/relacion', [SongController::class, 'asignarOwner'])->name('song.relacion.client.song');
 

@@ -12,12 +12,12 @@
             <a href="{{ route('canciones.registrar', $cliente->id) }}" style="padding-right: 135px;">
                 <button class="site-btn">Subir cancion</button>
             </a>
-            <a href="#">
+            <a href="{{ route('canciones.DeleteShow', $cliente->id) }}">
                 <button class="site-btn">Eliminar canciones</button>
             </a>
         </div>
         <div class="row" style="margin: auto; width: 50%; padding: 20px;">
-            <a href="#" style="padding-right: 115px;">
+            <a href="{{ route('canciones.EditShow', $cliente->id) }}" style="padding-right: 115px;">
                 <button class="site-btn">Modificar canciones</button>
             </a>
             <a href="{{ route('canciones.MisCanciones', $cliente->id ) }}">
