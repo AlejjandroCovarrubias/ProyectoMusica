@@ -13,7 +13,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap" rel="stylesheet">
  
 	<!-- Stylesheets -->
-	<link rel="stylesheet" href=" {{asset('css/bootstrap.min.css')}}"/>
+	<link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}"/>
 	<link rel="stylesheet" href="{{asset('css/font-awesome.min.css')}}"/>
 	<link rel="stylesheet" href="{{asset('css/owl.carousel.min.css')}}"/>
 	<link rel="stylesheet" href="{{asset('css/slicknav.min.css')}}"/>
@@ -36,36 +36,11 @@
 
 	<!-- Header section -->
 	<header class="header-section clearfix">
-		<a href="index.html" class="site-logo">
-			<img src="img/logo.png" alt=""> 
+		<a href="index.html">
+			<img src="{{asset('logo/Meloetta_logo.png')}}" width="100" style="padding-top: 15px;" alt="logo-meloetta"> 
 		</a>
-		<div class="header-right">
-			<div class="user-panel">
-				@if (Route::has('login'))
-                <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Mi cuenta</a>
-						<form method="POST" action="{{ route('logout') }}" x-data>
-							@csrf
-							<a href="{{ url('/logout') }}"
-								onclick="event.preventDefault();
-								this.closest('form').submit();
-								document.getElementById('logout').submit();">
-							Salir de la sesion
-							</a>
-						</form>
-                    @else
-                        <a href="{{ route('login') }}" class="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Iniciar sesion</a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Registrarse</a>
-                        @endif
-                    @endauth
-                </div>
-            	@endif
-			</div> 
-		</div>
 		<ul class="main-menu">
-			<li><a href="{{route('cliente.index')}}">Inicio</a></li>
+			<li><a href="/">Inicio</a></li>
 			<li><a href="#">Playlists</a>
 				<ul class="sub-menu">
 					<li><a href="#">Por genero</a></li>
@@ -74,9 +49,34 @@
 					<li><a href="#">Por nombre</a></li>
 				</ul>
 			</li>
-			<li><a href="#">Mis playlists</a></li>
             <li><a href="{{route('cliente.create')}}">Registrate como artista</a></li>
-			<li><a href="{{route('cliente.seleccion-cuenta', $clients=Auth::user() )}}">Subir canciones</a></li>
+			@if(Auth::user())
+				<li><a href="{{route('cliente.seleccion-cuenta', $clients=Auth::user() )}}">Subir canciones</a></li>
+			@endif
+			@if (Route::has('login'))
+                    @auth
+						<li><a href="#">Opciones de cuenta</a>
+						<ul class="sub-menu">
+							@if(Auth::user()->clients())
+								<li><a href="#">Mis perfiles de artista</a></li>
+							@endif
+							<li><a href="{{ route('profile.show') }}">Mi cuenta</a></li>
+							<form method="POST" action="{{ route('logout') }}">
+								@csrf
+								<li><a href="{{ url('/logout') }}" onclick="event.preventDefault(); this.closest('form').submit(); document.getElementById('logout').submit();">Salir</a></li>
+							</form>
+						</ul>
+                    @else
+						<li><a href="#">Registrate/Inicia</a>
+						<ul class="sub-menu">
+							<li><a href="{{ route('login') }}">Iniciar sesion</a></li>
+							@if (Route::has('register'))
+								<li><a href="{{ route('register') }}">Registrarse</a></li>
+							@endif
+						</ul>
+                    @endauth
+            	@endif
+			</li>
 		</ul>
 	</header>
 	<!-- Header section end -->
@@ -139,6 +139,9 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="{{asset('js/owl.carousel.min.js')}}"></script>
 	<script src="{{asset('js/mixitup.min.js')}}"></script>
 	<script src="{{asset('js/main.js')}}"></script>
+	<!-- Audio Player and Initialization -->
+	<script src="{{asset('js/jquery.jplayer.min.js')}}"></script>
+	<script src="{{asset('js/jplayerInit.js')}}"></script>
 
 	</body>
 </html>

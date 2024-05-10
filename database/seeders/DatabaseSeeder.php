@@ -21,11 +21,15 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        
 
+        //Esto es un factory
         User::factory(5)
-            ->has(Client::factory()->count(5))
+            ->has(Client::factory()->count(2))
             ->create();
+        
 
+        //Seeder
         User::factory()
             ->has(Client::factory()->count(5))
             ->create([

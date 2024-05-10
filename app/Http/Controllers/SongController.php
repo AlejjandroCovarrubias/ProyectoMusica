@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Song;
+use App\Mail\NewSong;
 use App\Models\Client;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
 use Intervention\Image\Laravel\Facades\Image;
 
 
@@ -50,7 +55,8 @@ class SongController extends Controller
     public function show($id)
     {
         $song=Song::findOrFail($id);
-        return view('canciones.cancionesShow',compact('song'));
+        $cliente=$song->client()->get();
+        return view('canciones.cancionesShow',compact('song'),compact('cliente'));
     }
 
     /**
@@ -64,9 +70,16 @@ class SongController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $idSong)
     {
-        $song=Song::findOrFail($id);
+        $request->validate([
+            'title' => 'required',
+            'genre' => 'required',
+            'image' => 'required',
+            'mp3' => 'required',
+        ]);
+        $song=Song::findOrFail($idSong);
+        $this->authorize('update',[$song,$request->clienteid]);
         $song->title=$request->title;
         $song->genre=$request->genre;
         Storage::delete('public/'.$song->ubiPortada);
@@ -85,30 +98,38 @@ class SongController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($idSong)
+    public function destroy(Request $request,$idSong)
     {
         $song=Song::findOrFail($idSong);
-        $cliente=$song->client()->get();
-        dd($cliente);
+        $this->authorize('delete',[$song,$request->clienteid]);
         Storage::delete('public/'.$song->ubiPortada);
         Storage::delete('public/'.$song->ubiCancion);
         $song->delete();
+        return back();
     }
 
     public function vistaGeneral($id)
     {
         $cliente=Client::findOrFail($id);
+        Gate::authorize('opcionesCanciones', $cliente);
         return view('canciones.cancionesGeneral',compact('cliente'));
     }
 
     public function Registrar($id)
     {
         $cliente=Client::findOrFail($id);
+        Gate::authorize('formCreate', $cliente);
         return view('canciones.cancionesCreate',compact('cliente'));
     }
 
     public function asignarOwner(Request $request, $id)
     {
+        $request->validate([
+            'title' => 'required',
+            'genre' => 'required',
+            'image' => 'required',
+            'mp3' => 'required',
+        ]);
         $song=new Song();
         $song->title=$request->title;
         $song->genre=$request->genre;
@@ -122,19 +143,22 @@ class SongController extends Controller
         $song->save();
         $cliente=Client::findOrFail($id);
         $cliente->song()->attach($song->id);
+        Mail::to($cliente->email)->send(new NewSong($cliente));
         return redirect()->route('canciones.show',$song->id);
     }
 
     public function MisCanciones($id)
     {
         $cliente=Client::findOrFail($id);
+        Gate::authorize('misCanciones', $cliente);
         $songs=$cliente->song()->get();
-        return view('canciones.cancionesIndex',compact('songs'));
+        return view('canciones.cancionesIndex',compact('songs'),compact('cliente'));
     }
 
     public function EditShow($id)
     {
         $cliente=Client::findOrFail($id);
+        Gate::authorize('ver-canciones-edit', $cliente);
         $songs=$cliente->song()->get();
         return view('canciones.cancionesEditShow',compact('songs'),compact('cliente'));
     }
@@ -142,6 +166,7 @@ class SongController extends Controller
     public function EditSong($id,$id2)
     {
         $cliente=Client::findOrFail($id);
+        Gate::authorize('formEdit', $cliente);
         $song=Song::findOrFail($id2);
         return view('canciones.cancionesEditSong',compact('cliente'),compact('song'));
     }
@@ -149,6 +174,7 @@ class SongController extends Controller
     public function DeleteShow($id)
     {
         $cliente=Client::findOrFail($id);
+        Gate::authorize('ver-canciones-delete', $cliente);
         $songs=$cliente->song()->get();
         return view('canciones.cancionesDeleteShow',compact('songs'),compact('cliente'));
     }

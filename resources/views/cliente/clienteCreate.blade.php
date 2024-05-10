@@ -5,42 +5,48 @@
         <h1>Registro de artista</h1>
         <br>
         <p>¿Quieres compartir tus creaciones con más gente? Te animamos a que rellenes el formulario para que empieces a subir tu <a href="#">música.</a></p>
-        <form action="{{ route('cliente.store') }}" method="POST">
-            @csrf
-            <br>
-            <label for="username" style="display: inline-block; text-align:left;">Nombre artístico</label>
-            <input type="text" name="username" style="margin-left: 80px; @error('username') border-color: red; @enderror" value="{{ old('username') ?? Auth::user()->name }}">
-            <br>
-            <label for="email" style="display: inline-block; text-align:left;">Correo de contacto</label>
-            <input type="text" name="email" style="margin-left: 62px; @error('email') border-color: red; @enderror" value="{{ old('email') ?? Auth::user()->email }}">
-            <br>
-            <label for="password" style="display: inline-block; text-align:left;">Password</label>
-            <input type="password" name="password" style="margin-left: 138px; @error('password') border-color: red; @enderror" value="{{ old('password') }}">
-            <br>
-            <label for="twitter" style="display: inline-block; text-align:left;">Contacto Twitter</label>
-            <input type="text" name="twitter" style="margin-left: 82px; @error('twitter') border-color: red; @enderror" value="{{ old('twitter') }}">
-            <br>
-            <label for="instagram" style="display: inline-block; text-align:left;">Contacto Instagram</label>
-            <input type="text" name="instagram" style="margin-left: 58px; @error('instagram') border-color: red; @enderror" value="{{ old('instagram') }}">
-            <br>
-            <label for="facebook" style="display: inline-block; text-align:left;">Contacto Facebook</label>
-            <input type="text" name="facebook" style="margin-left: 62px; @error('facebook') border-color: red; @enderror" value="{{ old('facebook') }}">
-            <br><br>
-            <label for="descrip">Cuéntanos sobre ti</label>
-            <br>
-            <textarea name="descrip" cols="40" rows="5" style="margin-left: 5px; @error('descrip') border-color: red; @enderror">{{ old('descrip') }}</textarea>
-            <br>
-            <input type="submit" value="Enviar">
-            <br><br><br>
-        </form>
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+        <form action="{{ route('cliente.store') }}" method="POST" class="contact-from" enctype="multipart/form-data">
+            <div class="row">
+                @csrf
+                <br>
+                <div class="col-md-6">
+                    <label for="username" style="display: inline-block; text-align:left;">Nombre artístico</label>
+                    <input type="text" name="username" style="@error('username') color: red; @enderror" value="{{ old('username') ?? Auth::user()->name }}">
+                </div>
+                <br>
+                <div class="col-md-6">
+                    <label for="email" style="display: inline-block; text-align:left;">Correo de contacto</label>
+                    <input type="text" name="email" style="@error('email') color: red; @enderror" value="{{ old('email') ?? Auth::user()->email }}">
+                </div>
+                <br>
+                <div class="col-md-6">
+                    <label for="twitter" style="display: inline-block; text-align:left;">Contacto Twitter</label>
+                    <input type="text" name="twitter" style="@error('twitter') color: red; @enderror" value="{{ old('twitter') }}">
+                </div>
+                <br>
+                <div class="col-md-6">
+                    <label for="instagram" style="display: inline-block; text-align:left;">Contacto Instagram</label>
+                    <input type="text" name="instagram" style="@error('instagram') color: red; @enderror" value="{{ old('instagram') }}">
+                </div>
+                <br>
+                <div class="col-md-6">
+                    <label for="facebook" style="display: inline-block; text-align:left;">Contacto Facebook</label>
+                    <input type="text" name="facebook" style="@error('facebook') color: red; @enderror" value="{{ old('facebook') }}">
+                </div>
+                <div class="col-md-6">
+                    <label for="image" style="display: inline-block; text-align:left;">Tu imagen</label>
+                    <input type="file" name="image" style="padding-left:180px; padding-top:15px;@error('image') border-color: red; @enderror;" accept="image/*">
+                </div>
+                <br><br>
+                <label for="descrip">Cuéntanos sobre ti</label>
+                <br>
+                <textarea name="descrip" cols="40" rows="5" style="@error('descrip') color: red; @enderror">{{ old('descrip') }}</textarea>
+                <br>
+                <input type="submit" value="Enviar">
+                <br><br><br>
             </div>
-        @endif
+        </form>
+        @include('parcial.error-forms')
+        <br><br>
     </div>
 </x-layout-gen>

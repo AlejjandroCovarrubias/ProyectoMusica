@@ -20,11 +20,12 @@ class ClientFactory extends Factory
         return [
             'username'=>$this->faker->unique()->userName(),
             'email'=>$this->faker->unique()->email(),
-            'password'=>$this->faker->password(),
             'descrip'=>$this->faker->paragraph(),
             'twitter'=>$this->faker->optional()->word(),
             'facebook'=>$this->faker->optional()->word(),
             'instagram'=>$this->faker->optional()->word(),
+            'ubiFoto'=>$this->faker->image('public/',600,480,null,false),
+            'mimeFoto'=>'image/png'
         ];
     }
 }

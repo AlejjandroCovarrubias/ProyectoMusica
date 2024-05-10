@@ -7,26 +7,29 @@
         <br>
         <h1>Gestionas estas cuentas:</h1>
         <br>
-        <table border="1" style="margin-left:auto; margin-right:auto;">
-            <thead>
-                <tr>
-                    <th>Correo del cliente</th>
-                    <th>Nombre de usuario</th>
-                    <th>Gesion</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($clients as $client)
-                <tr>
-                    <td style="padding: 30px;">{{Auth::user()->email}}</td>
-                    <td style="padding: 30px;">{{$client->username}}</td>
-                    <td style="padding: 30px;">
-                    <a href=" {{ route('canciones.vista-general',$client->id) }} ">Subir cancion</a>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-        <br><br>  
+        <div class="row">
+            @foreach($clients as $client)
+            <div class="col-lg-3 col-sm-6">
+                <div class="premium-item">
+                    <a href=" {{ route('canciones.vista-general',$client->id) }} ">
+                        <img src="{{asset('img/acceder_perfil.gif')}}">
+                    </a>
+                    <h4>{{$client->username}}</h4>
+                </div>
+                <div class="songs-links" style="padding-top: 0px;">
+                    <a href="{{route('cliente.edit',$client->id)}}">
+                        <img src="{{asset('img/config-icons/config.png')}}" width="21px" height="20px">
+                    </a>
+                    <a href="{{route('cliente.destroy',$client->id)}}">
+                        <img src="{{asset('img/config-icons/delete.png')}}" width="21px" height="20px">
+                    </a>
+                    <a href="{{route('cliente.show',$client->id)}}">
+                        <img src="{{asset('img/config-icons/view_item.png')}}" width="21px" height="20px">
+                    </a>
+                </div>
+            </div>
+            @endforeach    
+        </div>  
     </div>
+    <br><br><br>
 </x-layout-gen>

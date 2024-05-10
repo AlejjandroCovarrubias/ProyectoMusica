@@ -66,11 +66,11 @@
 			thisItem = $(this),
 			player = thisItem.find('.jplayer');
 
-		thisItem.find('.jp-next').click(function (e) { 
+		thisItem.find('.jp-next').on('click',function (e) { 
 			FastforwardTrack();
 		});
 
-		thisItem.find('.jp-prev').click(function (e) { 
+		thisItem.find('.jp-prev').on('click',function (e) { 
 			RewindTrack();
 		});
 
@@ -98,6 +98,7 @@
 		function FastforwardTrack() {
 			//Get current progress and increment
 			var currentProgress = GetPlayerProgress();
+			
 			var futureProgress = currentProgress + 5;
 			//If the percentage exceeds the max - stop fast forwarding at the end.
 			if (futureProgress >= 100) {

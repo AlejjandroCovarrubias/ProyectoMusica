@@ -16,11 +16,12 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('username');
             $table->string('email');
-            $table->string('password');
             $table->text('descrip');
             $table->text('twitter')->nullable();
             $table->text('facebook')->nullable();
             $table->text('instagram')->nullable();
+            $table->string('ubiFoto');
+            $table->string('mimeFoto');
             $table->timestamps();
         });
     }

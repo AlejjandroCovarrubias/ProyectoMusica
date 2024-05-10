@@ -1,19 +1,52 @@
 <x-layout-gen>
     <title>Cancion {{$song->title}}</title>
     <br><br>
-    <div class="container" style="text-align:center;">
-        <h1>{{$song->title}}</h1>
-        <div class="row" style="margin: auto; width: 50%; padding: 20px;">
-            <ul>
-                <li>Titulo: <b>{{ $song->title }}</b></li>
-                <br>
-                <li>Genero: <b>{{$song->genre}}</b></li>  
-                <br><br><br>
-                <audio controls style="padding-right: 50px;">
-                        <source src="{{ asset('storage/' . $song->first()->ubiCancion) }}" type="audio/mpeg">
-                </audio>
-            </ul>
-            <img src="{{ asset('storage/' . $song->first()->ubiPortada) }}" width="200px" style="padding-left: 50px;">
+    <section class="songs-section">
+        <div class="container">
+            <h1></h1>
+            <div class="song-item">
+                    <div class="song-item">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="song-info-box">
+                                    <img src="{{ asset('storage/' . $song->ubiPortada) }}">
+                                    <div class="song-info">
+                                        @foreach($cliente as $cliente)
+                                            <h4>{{$cliente->username}}</h4>
+                                        @endforeach
+                                        <p>{{$song->title}},{{$song->genre}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="single_player_container">
+                                    <div class="single_player">
+                                        <div class="jp-jplayer jplayer" data-ancestor=".jp_container_1" data-url="{{ asset('storage/' . $song->ubiCancion) }}"></div>
+                                        <div class="jp-audio jp_container_1" role="application" aria-label="media player">
+                                            <div class="jp-gui jp-interface">
+                                                <!-- Player Controls -->
+                                                <div class="player_controls_box">
+                                                    <button class="jp-play player_button" tabindex="0"></button>
+											        <button class="jp-stop player_button" tabindex="0"></button>
+                                                </div>
+                                                <!-- Progress Bar -->
+                                                <div class="player_bars">
+                                                    <div class="jp-progress" style="pointer-events: none;" >
+                                                        <div class="jp-seek-bar">
+                                                            <div>
+                                                                <div class="jp-play-bar"><div class="jp-current-time" role="timer" aria-label="time">0:00</div></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
         </div>
-    </div>
+    </section>
 </x-layout-gen>

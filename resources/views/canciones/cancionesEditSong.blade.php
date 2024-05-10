@@ -11,8 +11,8 @@
             <input type="text" name="title" style="margin-left: 80px; @error('title') border-color: red; @enderror" value="{{ old('title') ?? $song->title }}">
             <br><br>
             <label for="genre" style="display: inline-block; text-align:left;">Seleccione un genero</label>
-            <select name="genre" style="margin-left: 35px; @error('genre') border-color: red; @enderror" value="{{ old('genre') ?? $song->genre }}>
-                <option value="">Opciones...</option>
+            <select name="genre" style="margin-left: 35px; @error('genre') border-color: red; @enderror" value="{{ old('genre') ?? $song->genre }}">
+                <option>Opciones...</option>
                 <option value="Reggaeton">Reggaeton</option>
                 <option value="Rap">Rap</option>
                 <option value="Pop">Pop</option>
@@ -34,23 +34,16 @@
             </select>
             <br><br>
             <label for="image" style="margin-left: 170px; display: inline-block; text-align:left;">Portada</label>
-            <input type="file" name="image" style="margin-left: 60px; @error('image') border-color: red; @enderror" value="{{ old('image') }}">
+            <input type="file" name="image" style="margin-left: 60px; @error('image') border-color: red; @enderror" value="{{ old('image') }}" accept="image/*">
             <br><br>
             <label for="mp3" style="margin-left: 170px; display: inline-block; text-align:left;">Archivo</label>
-            <input type="file" name="mp3" style="margin-left: 60px; @error('image') border-color: red; @enderror" value="{{ old('mp3') }}">
+            <input type="file" name="mp3" style="margin-left: 60px; @error('image') border-color: red; @enderror" value="{{ old('mp3') }}" accept="audio/*">
             <br><br>
             <input type="submit" value="Enviar">
             <br><br>
+            <input type="hidden" name="clienteid" value="{{$cliente->id}}"> <!-- Esto queda validado en el back para evitar filtraciones -->
         </form>
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        @include('parcial.error-forms')
         <br><br>
     </div>
 </x-layout-gen>

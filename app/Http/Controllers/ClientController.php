@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
-use Database\Factories\ClientFactory;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Database\Factories\ClientFactory;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Session\Session;
+
+use function Laravel\Prompts\select;
 
 class ClientController extends Controller
 {
@@ -41,7 +44,6 @@ class ClientController extends Controller
         $request->validate([
             'username'=>'required|max:255',
             'email'=>'required|max:255',
-            'password'=>'required|max:255',
             'twitter'=>'max:255',
             'facebook'=>'max:255',
             'instagram'=>'max:255',
@@ -49,17 +51,21 @@ class ClientController extends Controller
         ]);
         // Guardar informacion
         $client=new Client();
+        if ($request->file('image')->isValid()) 
+        {
+            $client->ubiFoto=$request->image->store('','public');
+            $client->mimeFoto=$request->image->getClientMimeType();
+        }
         $client->user_id=Auth::id();
         $client->username=$request->username;
         $client->email=$request->email;
-        $client->password=$request->password;
         $client->twitter=$request->twitter;
         $client->facebook=$request->facebook;
         $client->instagram=$request->instagram;
         $client->descrip=$request->descrip;
         $client->save();
         //Redireccion
-        return redirect()->route('cliente.index');
+        return $this->crearCanciones();
     }
 
     /**
@@ -68,7 +74,9 @@ class ClientController extends Controller
     public function show($id)
     {
         $client=Client::findOrFail($id);
-        return view('cliente.clienteShow',compact('client'));
+        $songs=$client->song()->get();
+        $songs->slice(0,2);
+        return view('cliente.clienteShow',compact('client'),compact('songs'));
     }
 
     /**
@@ -77,6 +85,7 @@ class ClientController extends Controller
     public function edit($id)
     {
         $client=Client::findOrFail($id);
+        $this->authorize('update',$client);
         return view('cliente.clienteEdit',compact('client'));
     }
 
@@ -88,7 +97,6 @@ class ClientController extends Controller
         $request->validate([
             'username'=>'required|max:255',
             'email'=>'required|max:255',
-            'password'=>'required|max:255',
             'twitter'=>'max:255',
             'facebook'=>'max:255',
             'instagram'=>'max:255',
@@ -96,17 +104,23 @@ class ClientController extends Controller
         ]);
         // Guardar informacion
         $client=Client::findOrFail($id);
+        $this->authorize('update',$client);
+        Storage::delete('public/'.$client->ubiFoto);
+        if ($request->file('image')->isValid()) 
+        {
+            $client->ubiFoto=$request->image->store('','public');
+            $client->mimeFoto=$request->image->getClientMimeType();
+        }
         $client->user_id=Auth::id();
         $client->username=$request->username;
         $client->email=$request->email;
-        $client->password=$request->password;
         $client->twitter=$request->twitter;
         $client->facebook=$request->facebook;
         $client->instagram=$request->instagram;
         $client->descrip=$request->descrip;
         $client->save();
         //Redireccion
-        return redirect()->route('cliente.index');
+        return $this->crearCanciones();
     }
 
     /**
@@ -115,13 +129,17 @@ class ClientController extends Controller
     public function destroy($id)
     {
         $client=Client::findOrFail($id);
+        $this->authorize('delete',$client);
+        Storage::delete('public/'.$client->ubiFoto);
         $client->delete();
-        return redirect()->route('cliente.index');
+        return $this->crearCanciones();
     }
 
     public function crearCanciones()
     {
         $clients=Auth::user()->clients;
+        foreach ($clients as $client)
+            $this->authorize('vista',$client); 
         return view('cliente.clienteSeleccion',compact('clients'));
     }
 }
