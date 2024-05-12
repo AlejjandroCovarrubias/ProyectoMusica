@@ -1,7 +1,7 @@
 <x-layout-gen>
 <br><br><br>
     <section class="songs-section">
-        @foreach ($songs as $song)
+        @foreach ($cliente->song as $song)
             <div class="container">
                 <h1></h1>
                 <div class="song-item">
@@ -11,8 +11,8 @@
                                     <div class="song-info-box">
                                         <img src="{{ asset('storage/' . $song->ubiPortada) }}">
                                         <div class="song-info">
-                                            @foreach($song->client()->get(); as $cliente)
-                                                <h4>{{$cliente->username}}</h4>
+                                            @foreach($song->client as $cliente)
+                                                <h4><a href="{{route('cliente.show',$cliente->id)}}" target="_blank">{{$cliente->username}}</a></h4>
                                             @endforeach
                                             <p>{{$song->title}},{{$song->genre}}</p>
                                         </div>

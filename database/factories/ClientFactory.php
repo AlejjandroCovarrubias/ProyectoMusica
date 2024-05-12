@@ -24,7 +24,7 @@ class ClientFactory extends Factory
             'twitter'=>$this->faker->optional()->word(),
             'facebook'=>$this->faker->optional()->word(),
             'instagram'=>$this->faker->optional()->word(),
-            'ubiFoto'=>$this->faker->image('public/',600,480,null,false),
+            'ubiFoto'=>$this->faker->image('public/storage/',600,480,null,false),
             'mimeFoto'=>'image/png'
         ];
     }

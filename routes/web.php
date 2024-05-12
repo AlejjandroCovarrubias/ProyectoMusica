@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\PlaylistController;
 use App\Http\Controllers\SongController;
+use App\Models\Playlist;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,9 +21,15 @@ Route::get('/', function () {
     return view('generales.index');
 });
 
+Route::get('/AllProfiles/{cliente}',[ClientController::class,'AllProfiles'])->name('generales.AllProfiles');
+
 Route::resource('cliente',ClientController::class);
 
+Route::resource('playlist',PlaylistController::class);
+
 Route::resource('canciones',SongController::class);
+
+Route::get('/playlist/{cliente}/misplaylists',[PlaylistController::class,'misPlaylists'])->name('playlist.misPlaylists');
 
 Route::get('/cliente/{cliente}/seleccion-cuenta',[ClientController::class,'crearCanciones'])->name('cliente.seleccion-cuenta');    
 

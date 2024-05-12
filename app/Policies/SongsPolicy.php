@@ -39,7 +39,10 @@ class SongsPolicy
      */
     public function update(User $user, Song $song, $id): bool
     {
-       return $user->clients()->find($id)->id === $song->client()->get()->first()->id; 
+        if(!Empty($user->clients->find($id)->id))
+            return $user->clients->find($id)->id === $song->client()->get()->skip(1)->first()->id;
+        else
+            return false;
     }
 
     /**
@@ -47,7 +50,10 @@ class SongsPolicy
      */
     public function delete(User $user, Song $song, $id): bool
     {
-        return $user->clients()->find($id)->id === $song->client()->get()->first()->id; 
+        if(!Empty($user->clients->find($id)->id))
+            return $user->clients->find($id)->id === $song->client()->get()->skip(1)->first()->id;
+        else
+            return false;
     }
 
     /**

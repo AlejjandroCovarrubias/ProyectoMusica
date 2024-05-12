@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Song;
+use App\Models\User;
 use App\Mail\NewSong;
 use App\Models\Client;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
@@ -54,8 +55,8 @@ class SongController extends Controller
      */
     public function show($id)
     {
-        $song=Song::findOrFail($id);
-        $cliente=$song->client()->get();
+        $song=Song::findOrFail($id); // Es una sola consulta
+        $cliente=$song->client()->select('username')->get(); // Mejoramos la consulta obteniedno solo el username
         return view('canciones.cancionesShow',compact('song'),compact('cliente'));
     }
 
@@ -78,7 +79,7 @@ class SongController extends Controller
             'image' => 'required',
             'mp3' => 'required',
         ]);
-        $song=Song::findOrFail($idSong);
+        $song=Song::findOrFail($idSong); // Es una sola consulta
         $this->authorize('update',[$song,$request->clienteid]);
         $song->title=$request->title;
         $song->genre=$request->genre;
@@ -100,7 +101,7 @@ class SongController extends Controller
      */
     public function destroy(Request $request,$idSong)
     {
-        $song=Song::findOrFail($idSong);
+        $song=Song::findOrFail($idSong); // Es una sola 
         $this->authorize('delete',[$song,$request->clienteid]);
         Storage::delete('public/'.$song->ubiPortada);
         Storage::delete('public/'.$song->ubiCancion);
@@ -110,14 +111,14 @@ class SongController extends Controller
 
     public function vistaGeneral($id)
     {
-        $cliente=Client::findOrFail($id);
+        $cliente=Client::findOrFail($id);  // Es una sola consulta
         Gate::authorize('opcionesCanciones', $cliente);
         return view('canciones.cancionesGeneral',compact('cliente'));
     }
 
     public function Registrar($id)
     {
-        $cliente=Client::findOrFail($id);
+        $cliente=Client::findOrFail($id); // Es una sola consulta
         Gate::authorize('formCreate', $cliente);
         return view('canciones.cancionesCreate',compact('cliente'));
     }
@@ -130,6 +131,7 @@ class SongController extends Controller
             'image' => 'required',
             'mp3' => 'required',
         ]);
+
         $song=new Song();
         $song->title=$request->title;
         $song->genre=$request->genre;
@@ -140,42 +142,56 @@ class SongController extends Controller
             $song->ubiCancion=$request->mp3->store('','public');
             $song->mimeCancion=$request->mp3->getClientMimeType();
         }
+        
+        if(!empty($request->artista_dos))
+            {
+                $segundo_artista=Client::where('username',$request->artista_dos)->first(); // Necesito de forma obligada consultar en toda la tabla para encontrar al usuario, pero utilizamos where para eagerloading
+                if($segundo_artista === null)
+                {
+                    Storage::delete('public/'.$song->ubiPortada);
+                    Storage::delete('public/'.$song->ubiCancion);   
+                    return redirect()->back()->withErrors('No existe el segundo artista...');
+                }
+            }
         $song->save();
-        $cliente=Client::findOrFail($id);
-        $cliente->song()->attach($song->id);
-        Mail::to($cliente->email)->send(new NewSong($cliente));
+        $cliente=Client::findOrFail($id); // Una sola consulta
+        if(!empty($segundo_artista))
+            {
+                $segundo_artista->song()->attach($song->id);
+                Mail::to($segundo_artista->email)->send(new NewSong($segundo_artista));
+            }
+        $cliente->song()->attach($song->id); // Primer Artista
+        Mail::to($cliente->email)->send(new NewSong($cliente)); 
         return redirect()->route('canciones.show',$song->id);
     }
 
     public function MisCanciones($id)
     {
-        $cliente=Client::findOrFail($id);
+        $cliente=Client::findOrFail($id); // Una sola consulta
         Gate::authorize('misCanciones', $cliente);
-        $songs=$cliente->song()->get();
+        $songs=$cliente->song; // Realmente necesito todos los atributos de esta consulta
         return view('canciones.cancionesIndex',compact('songs'),compact('cliente'));
     }
 
     public function EditShow($id)
     {
-        $cliente=Client::findOrFail($id);
+        $cliente=Client::with('song')->findOrFail($id); // Una sola consulta
         Gate::authorize('ver-canciones-edit', $cliente);
-        $songs=$cliente->song()->get();
-        return view('canciones.cancionesEditShow',compact('songs'),compact('cliente'));
+        return view('canciones.cancionesEditShow',compact('cliente'));
     }
 
     public function EditSong($id,$id2)
     {
-        $cliente=Client::findOrFail($id);
+        $cliente=Client::findOrFail($id); // Una sola consulta
         Gate::authorize('formEdit', $cliente);
-        $song=Song::findOrFail($id2);
+        $song=Song::findOrFail($id2); // Una sola consulta
         return view('canciones.cancionesEditSong',compact('cliente'),compact('song'));
     }
 
     public function DeleteShow($id)
     {
-        $cliente=Client::findOrFail($id);
+        $cliente=Client::with('song')->findOrFail($id); // Una sola consulta
         Gate::authorize('ver-canciones-delete', $cliente);
-        $songs=$cliente->song()->get();
-        return view('canciones.cancionesDeleteShow',compact('songs'),compact('cliente'));
+        return view('canciones.cancionesDeleteShow',compact('cliente'));
     }
 }

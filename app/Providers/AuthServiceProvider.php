@@ -7,8 +7,10 @@ namespace App\Providers;
 use App\Models\Song;
 use App\Models\User;
 use App\Models\Client;
+use App\Models\Playlist;
 use App\Policies\SongsPolicy;
 use App\Policies\ClientsPolicy;
+use App\Policies\PlaylistPolicy;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -25,6 +27,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         Client::class => ClientsPolicy::class,
         Song::class => SongsPolicy::class,
+        Playlist::class => PlaylistPolicy::class,
     ];
 
     /**

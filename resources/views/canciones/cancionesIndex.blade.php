@@ -11,8 +11,8 @@
                                     <div class="song-info-box">
                                         <img src="{{ asset('storage/' . $song->ubiPortada) }}">
                                         <div class="song-info">
-                                            @foreach($song->client()->get(); as $cliente)
-                                                <h4>{{$cliente->username}}</h4>
+                                            @foreach($song->client()->get() as $cliente)
+                                                <h4><a href="{{route('cliente.show',$cliente->id)}}" target="_blank">{{$cliente->username}}</a></h4>
                                             @endforeach
                                             <p>{{$song->title}},{{$song->genre}}</p>
                                         </div>

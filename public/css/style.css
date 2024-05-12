@@ -659,6 +659,28 @@ Playlist page
 	margin-bottom: 100px;
 }
 
+input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #f4f4f4;
+    border: 1px solid #dcdcdc;
+    padding: 10px;
+    border-radius: 50%;
+    vertical-align: middle;
+    position: relative;
+    outline: none;
+    cursor: pointer;
+    width: 20px; /* Tamaño del punto */
+    height: 20px; /* Tamaño del punto */
+}
+
+/* Estilo cuando el checkbox está seleccionado */
+input[type="checkbox"]:checked {
+    background-color: #4CAF50; /* Color de fondo cuando está activo */
+    border-color: #4CAF50; /* Color del borde cuando está activo */
+}	
+
 .playlist-filter li {
 	display: inline-block;
 	font-size: 15px;

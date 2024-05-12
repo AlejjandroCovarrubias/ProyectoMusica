@@ -7,13 +7,13 @@
                             <h3>Mis redes</h3>
                             <ul>
                                 @if($client->twitter)
-                                    <li><strong>Twitter:</strong><a href="twitter.com/{{$client->twitter}}" target="_blank"><span>{{$client->twitter}}</span></a></li>
+                                    <li><strong>Twitter:</strong><a href="https://www.twitter.com/{{$client->twitter}}" target="_blank"><span>{{$client->twitter}}</span></a></li>
                                 @endif
                                 @if($client->facebook)
-                                    <li><strong>Facebook:</strong><a href="facebook.com/{{$client->facebook}}" target="_blank"><span>{{$client->facebook}}</span></a></li>
+                                    <li><strong>Facebook:</strong><a href="https://www.facebook.com/{{$client->facebook}}" target="_blank"><span>{{$client->facebook}}</span></a></li>
                                 @endif
                                 @if($client->instagram)
-                                    <li><strong>Twitter:</strong><a href="instagram.com/{{$client->instagram}}" target="_blank"><span>{{$client->instagram}}</span></a></li>
+                                    <li><strong>Twitter:</strong><a href="https://www.instagram.com/{{$client->instagram}}" target="_blank"><span>{{$client->instagram}}</span></a></li>
                                 @endif
                                 @if($client->email)
                                     <li><strong>Para mayor contacto:</strong><span>{{$client->email}}</span></a></li>

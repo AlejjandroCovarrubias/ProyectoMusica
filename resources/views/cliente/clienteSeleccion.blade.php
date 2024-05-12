@@ -20,12 +20,16 @@
                     <a href="{{route('cliente.edit',$client->id)}}">
                         <img src="{{asset('img/config-icons/config.png')}}" width="21px" height="20px">
                     </a>
-                    <a href="{{route('cliente.destroy',$client->id)}}">
-                        <img src="{{asset('img/config-icons/delete.png')}}" width="21px" height="20px">
-                    </a>
                     <a href="{{route('cliente.show',$client->id)}}">
                         <img src="{{asset('img/config-icons/view_item.png')}}" width="21px" height="20px">
                     </a>
+                    <form action="{{ route('cliente.destroy', $client->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" style="border: none; background: none; padding: 0; margin: 0; cursor: pointer;">
+                             <img src="{{asset('img/config-icons/delete.png')}}" width="21px" height="20px" style="padding-left: 0px;"> 
+                        </button>
+                    </form>
                 </div>
             </div>
             @endforeach    

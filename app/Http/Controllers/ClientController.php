@@ -22,12 +22,6 @@ class ClientController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
-    {
-        $clients=Auth::user()->clients;
-        return view('cliente/clienteIndex',compact('clients'));
-    }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -47,6 +41,7 @@ class ClientController extends Controller
             'twitter'=>'max:255',
             'facebook'=>'max:255',
             'instagram'=>'max:255',
+            'image'=>'required',
             'descrip'=>'required|min:10'
         ]);
         // Guardar informacion
@@ -73,9 +68,8 @@ class ClientController extends Controller
      */
     public function show($id)
     {
-        $client=Client::findOrFail($id);
-        $songs=$client->song()->get();
-        $songs->slice(0,2);
+        $client=Client::findOrFail($id); // Una sola consulta
+        $songs=$client->song()->orderBy('created_at','desc')->take(2)->get(); // Necesito realmente toda la informacion de la consulta...
         return view('cliente.clienteShow',compact('client'),compact('songs'));
     }
 
@@ -84,7 +78,7 @@ class ClientController extends Controller
      */
     public function edit($id)
     {
-        $client=Client::findOrFail($id);
+        $client=Client::findOrFail($id); // Una sola consulta
         $this->authorize('update',$client);
         return view('cliente.clienteEdit',compact('client'));
     }
@@ -99,11 +93,12 @@ class ClientController extends Controller
             'email'=>'required|max:255',
             'twitter'=>'max:255',
             'facebook'=>'max:255',
+            'image'=>'required',
             'instagram'=>'max:255',
             'descrip'=>'required|min:10'
         ]);
         // Guardar informacion
-        $client=Client::findOrFail($id);
+        $client=Client::findOrFail($id); // Una sola consulta
         $this->authorize('update',$client);
         Storage::delete('public/'.$client->ubiFoto);
         if ($request->file('image')->isValid()) 
@@ -111,7 +106,7 @@ class ClientController extends Controller
             $client->ubiFoto=$request->image->store('','public');
             $client->mimeFoto=$request->image->getClientMimeType();
         }
-        $client->user_id=Auth::id();
+        $client->user_id=Auth::id(); 
         $client->username=$request->username;
         $client->email=$request->email;
         $client->twitter=$request->twitter;
@@ -128,7 +123,7 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        $client=Client::findOrFail($id);
+        $client=Client::findOrFail($id); // Una sola consulta
         $this->authorize('delete',$client);
         Storage::delete('public/'.$client->ubiFoto);
         $client->delete();
@@ -137,9 +132,17 @@ class ClientController extends Controller
 
     public function crearCanciones()
     {
-        $clients=Auth::user()->clients;
+        $clients=Auth::user()->clients; // No es consulta como tal si ya se ha cargado
         foreach ($clients as $client)
             $this->authorize('vista',$client); 
         return view('cliente.clienteSeleccion',compact('clients'));
+    }
+
+    public function AllProfiles()
+    {
+        $clients=Auth::user()->clients; // No es consulta como tal si ya se ha cargado
+        foreach ($clients as $client)
+            $this->authorize('AllProfile',$client);
+        return view('generales.AllProfiles',compact('clients'));
     }
 }

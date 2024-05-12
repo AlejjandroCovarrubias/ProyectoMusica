@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('ubiCancion');
             $table->string('mimeCancion');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

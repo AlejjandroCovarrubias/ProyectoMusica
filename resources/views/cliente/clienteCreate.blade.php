@@ -42,7 +42,7 @@
                 <br>
                 <textarea name="descrip" cols="40" rows="5" style="@error('descrip') color: red; @enderror">{{ old('descrip') }}</textarea>
                 <br>
-                <input type="submit" value="Enviar">
+                <input type="submit" value="Enviar" class="site-btn sb-c2">
                 <br><br><br>
             </div>
         </form>

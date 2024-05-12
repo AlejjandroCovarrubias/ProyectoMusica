@@ -44,8 +44,10 @@
                 <br><br>
                 <div class="col-md-6">
                     <label for="mp3" style="display: inline-block; text-align:left;">Archivo</label>
-                    <input type="file" name="mp3" style="padding-left:180px; padding-top:15px;@error('image') border-color: red; @enderror;" accept="audio/*">
+                    <input type="file" name="mp3" style="padding-left:180px; padding-top:15px;@error('mp3') border-color: red; @enderror;" accept="audio/*">
                 </div>
+                <label for="artista_dos" style="display: inline-block; text-align:left;">¿Es colaboración?, ingresa el nombre del artista:</label>
+                <input type="text" name="artista_dos" style="@error('artista_dos') border-color: red; @enderror;">
                 <br><br><br><br><br><br>
                 <input type="submit" value="Enviar" class="site-btn sb-c2">
                 <br><br>

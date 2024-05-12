@@ -11,19 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('playlists', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('username');
-            $table->string('email');
-            $table->text('descrip');
-            $table->text('twitter')->nullable();
-            $table->text('facebook')->nullable();
-            $table->text('instagram')->nullable();
-            $table->string('ubiFoto');
-            $table->string('mimeFoto');
-            $table->softDeletes();
+            $table->string('descrip');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -32,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('playlists');
     }
 };

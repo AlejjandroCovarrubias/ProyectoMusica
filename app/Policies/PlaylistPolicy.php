@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Client;
+use App\Models\Playlist;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class ClientsPolicy
+class PlaylistPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class ClientsPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Client $client): bool
+    public function view(User $user, Playlist $playlist): bool
     {
         //
     }
@@ -35,41 +35,36 @@ class ClientsPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Client $client): bool
+    public function update(User $user, Playlist $playlist): bool
     {
-        return $user->id === $client->user_id; 
-    }
-
-    public function AllProfile(User $user, Client $client): bool
-    {
-        return $user->id === $client->user_id; 
+        return $user->id === $playlist->user_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Client $client): bool
+    public function delete(User $user, Playlist $playlist): bool
     {
-        return $user->id === $client->user_id;
-    }
-
-    public function vista(User $user, Client $client): bool
-    {
-        return $user->id === $client->user_id;
+        return $user->id === $playlist->user_id;
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Client $client): bool
+    public function restore(User $user, Playlist $playlist): bool
     {
         //
+    }
+
+    public function verVista(User $user, Playlist $playlist): bool
+    {
+        return $user->id === $playlist->user_id;
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Client $client): bool
+    public function forceDelete(User $user, Playlist $playlist): bool
     {
         //
     }
